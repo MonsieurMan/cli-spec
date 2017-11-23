@@ -1,4 +1,6 @@
-import { Executable, Command, Option, Param } from '@orbital/core';
+import { Executable, Command, Option, Param, UseOptions } from '@orbital/core';
+
+import { GenerateOptions } from './generate.options';
 
 import { ServiceCommand } from './service/service.command';
 
@@ -12,11 +14,8 @@ import { ServiceCommand } from './service/service.command';
     ]
 })
 export class GenerateCommand implements Executable {
-
-
-
     constructor(
-        @UseOptions(SomeOptions) options: SomeOptions
+        @UseOptions(GenerateOptions) options: GenerateOptions
     ) { }
 
     execute(
