@@ -1,4 +1,4 @@
-### Features
+### Features (trying to be exhaustive)
 * Versioning
 * Typo suggestion
 * Argument 
@@ -24,10 +24,10 @@
 ### Example usage
 Program :
 ```typescript
+/// nest.cli.ts
 import { CLI } from '@cli/core';
 
-import { MyCommand } from './my.command';
-import { GenerateCommand } from './generate.command';
+import { GenerateCommand } from './generate/generate.command';
 import { InfoCommand } from './info.command';
 
 @CLI({
@@ -38,11 +38,12 @@ import { InfoCommand } from './info.command';
       InfoCommand
    ]
 })
-export class MyCli { }
+export class Nest { }
 ```
 
 A command :
 ```typescript
+/// generate/generate.command.ts
 import { Executable, Command, Option, Param } from '@cli/core';
 
 import { SomeOptions } from './generate.options':
@@ -53,6 +54,7 @@ import { SubCommand } from './sub.command';
    name: 'generate',
    aliases: ['g'],
    description: 'Generates a new domain object',
+   // Or subcommands ?
    commands: [
       SubCommand
    ]
@@ -73,6 +75,7 @@ export class GenerateCommand implements Executable {
 ```
 
 ```typescript
+/// generate/generate.options.ts
 import { Options, Option } from '@cli/core';
 
 export class SomeOptions extends Options {
@@ -86,4 +89,15 @@ export class SomeOptions extends Options {
       return this.timeout / 1000;
    }
 }
+```  
+
+And finally :
+```typescript
+/// main.ts
+import { bootstrap } from '@cli/core';
+
+import { Nest } from './nest.cli';
+
+bootstrap(Nest)
+   .execute(process.argv);
 ```
