@@ -74,6 +74,51 @@ export class GenerateCommand implements Executable {
 }
 ```
 
+// WILSON HOBBS - probably a better structure
+```typescript
+/// generate/generate.command.ts
+import { Executable, Command, Option, Param } from '@cli/core';
+
+@Command({
+   name: 'generate',
+   // ... truncated
+})
+export class GenerateCommand implements Executable {
+
+   @Option('help', {
+      alias: 'h',
+      help: 'Help text',
+      validators: []
+   })
+   help: boolean;
+   
+   // OR!!!
+     
+   @Option({
+      name: 'force',
+      alias: 'f',
+      help: 'Help text',
+      validators: []
+   })
+   force: boolean;
+   
+   constructor(
+      @UseOptions(SomeOptions) options: SomeOptions
+   ) {}
+      
+   execute(
+      @Param({
+         validators: []
+      }) url: string,
+      @Param({
+         required: false
+      }) optional: string
+   ) {
+      // implementation
+   }
+}
+```
+
 ```typescript
 /// generate/generate.options.ts
 import { Options, Option } from '@cli/core';
@@ -84,7 +129,9 @@ export class SomeOptions extends Options {
       description: 'timeout that does nothing',
    })
    timeout: number;
-
+   // WILSON HOBBS - I don't know that this is a possible way of using decorators.
+   // Should we consider making all of them class-level decorators (like @Input() and @Output()
+   // in Angular? 
    get timeoutInSeconds(): number {
       return this.timeout / 1000;
    }
@@ -97,6 +144,8 @@ And finally :
 import { bootstrap } from '@cli/core';
 
 import { Nest } from './nest.cli';
+// WILSON HOBBS - this might be a better class name
+import { NestCli } from './nest.cli';
 
 bootstrap(Nest)
    .execute(process.argv);
