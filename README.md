@@ -44,15 +44,16 @@
 ### Example usage
 Program :
 ```typescript
-import { Cli } from '@tli/core';
+import { CLI } from '@tli/core';
 
 import { MyCommand } from './my-command';
 import { SomeOtherCommand } from './SomeOtherCommand';
 
-@Cli({
+@CLI({
    // Not sure about this one
    name: 'myCli',
-   version: [ 1, 0, 0 ] || '1.0.0',
+   // Maybe add this one automatically from package.json ?
+   version: [ 1, 0, 0 ] || '1.0.0', 
    commands: [
       MyCommand,
       SomeOtherCommand
@@ -66,38 +67,32 @@ export class MyCli { }
 
 A command :
 ```typescript
-import { Command, Logger } from '@tli/core';
+import { CommandMetadata, Command, Logger, Option, Param } from '@tli/core';
 
 import { SubCommand } from './sub-command';
 
-@Command({
+@CommandMetadata({
    name: 'generate',
    aliases: ['g'],
    description: 'Generates a new domain object',
-   arguments: [
-      {
-         name: ''
-      }
-   ],
-   options: [
-      {
-
-      }
-   ]
-   // Or 
-   subCommands: [
-      SubCommand
-   ]
 })
-export class MyCommand {
+export class MyCommand extends Command {
    constructor(
       private logger: Logger
    ) { }
 
-   // Clime solution provides a way to have typed compile time param and parsed at runtime
-   // Need more investigation on this one
-   execute() {
+   execute(
+      @Param({
+         name: url,
+         help: '',
+         validators: []
+      }) url: string,
+      @Option({
+         selectors: ['r', 'reuse'],
 
+      })
+   ) {
+      this.logger.info('Wowo');
    }
 }
 ```
