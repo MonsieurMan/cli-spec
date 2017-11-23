@@ -25,7 +25,7 @@
 Program :
 ```typescript
 /// nest.cli.ts
-import { CLI } from '@cli/core';
+import { CLI, Executable } from '@cli/core';
 
 import { GenerateCommand } from './generate/generate.command';
 import { InfoCommand } from './info.command';
@@ -38,7 +38,11 @@ import { InfoCommand } from './info.command';
       InfoCommand
    ]
 })
-export class Nest { }
+export class NestCLI implements Executable { 
+   execute() {
+      // Could also implement behavior for root command instead of just displaying the help like yarn
+   }
+}
 ```
 
 A command :
@@ -112,7 +116,18 @@ export class GenerateCommand implements Executable {
       }) url: string,
       @Param({
          required: false
-      }) optional: string
+      }) optional: string,
+      // MrMan, my first idea
+      @Option({
+         // name: 'force', this can be retrieved with metadata 
+         alias: 'f',
+         // Would rather use description here
+         // Other framework introduce a brief which is the one line
+         // And a description which is, you guessed it, the long one.
+         help: 'Help text',
+         validators: []
+      })
+      force: boolean;
    ) {
       // implementation
    }
@@ -143,10 +158,8 @@ And finally :
 /// main.ts
 import { bootstrap } from '@cli/core';
 
-import { Nest } from './nest.cli';
-// WILSON HOBBS - this might be a better class name
-import { NestCli } from './nest.cli';
+import { NestCLI } from './nest.cli';
 
-bootstrap(Nest)
+bootstrap(NestCLI)
    .execute(process.argv);
 ```
