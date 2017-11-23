@@ -1,11 +1,4 @@
-# Nodejs CLI state of the art
-### Existing solutions  
-* [Vorpal](./vorpal.md)
-* [Clime](./clime.md)
-* [Caporal](./caporal.md)
-* [Commander](./commander.md)
-
-### Extracted features
+### Features
 * Versioning
 * Typo suggestion
 * Argument 
@@ -28,71 +21,69 @@
 * Autocomplete
 * i18n generation
 
-### Design ideas
-* CLI for the CLI framework
-   * Help scaffolding a project using the framework
-   * Demonstrate best practices on how to use the framework
-   * Can make the commands follow directory tree without enforcing it
-   * Automatically add unit test for each commands
-* Testable *(see above)*
-   * Use DI for commands for easier mock
-* Tslint rules
-   * Command decorator parameter order
-   * @Command() decorated class should provide execute method
-* Prompt support
-
 ### Example usage
 Program :
 ```typescript
-import { CLI } from '@tli/core';
+import { CLI } from '@cli/core';
 
-import { MyCommand } from './my-command';
-import { SomeOtherCommand } from './SomeOtherCommand';
+import { MyCommand } from './my.command';
+import { GenerateCommand } from './generate.command';
+import { InfoCommand } from './info.command';
 
 @CLI({
-   // Not sure about this one
-   name: 'myCli',
-   // Maybe add this one automatically from package.json ?
-   version: [ 1, 0, 0 ] || '1.0.0', 
+   name: 'nest',
+   version: '1.0.0', 
    commands: [
-      MyCommand,
-      SomeOtherCommand
-   ],
-   // Optional
-   help: '',
-
+      GenerateCommand,
+      InfoCommand
+   ]
 })
 export class MyCli { }
 ```
 
 A command :
 ```typescript
-import { CommandMetadata, Command, Logger, Option, Param } from '@tli/core';
+import { Executable, Command, Option, Param } from '@cli/core';
 
-import { SubCommand } from './sub-command';
+import { SomeOptions } from './generate.options':
 
-@CommandMetadata({
+import { SubCommand } from './sub.command';
+
+@Command({
    name: 'generate',
    aliases: ['g'],
    description: 'Generates a new domain object',
+   commands: [
+      SubCommand
+   ]
 })
-export class MyCommand extends Command {
-   constructor(
-      private logger: Logger
-   ) { }
-
+export class GenerateCommand implements Executable {
    execute(
       @Param({
-         name: url,
-         help: '',
          validators: []
       }) url: string,
-      @Option({
-         selectors: ['r', 'reuse'],
-
-      })
+      @Param({
+         required: false
+      }) optional: string,
+      options: SomeOptions
    ) {
       this.logger.info('Wowo');
+   }
+}
+```
+
+```typescript
+import { Options, Option } from '@cli/core';
+
+export class SomeOptions extends Options {
+   @Option({
+      flag: 't',
+      description: 'timeout that does nothing',
+   })
+   timeout: number;
+
+   get timeoutInSeconds(): number {
+      return this.timeout / 1000;
    }
 }
 ```
