@@ -1,4 +1,4 @@
-import { bootstrap } from '@cli/core';
+import { bootstrap } from '@orbital/core';
 
 import { NestCLI } from './nest.cli';
 

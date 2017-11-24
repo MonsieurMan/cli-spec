@@ -1,4 +1,4 @@
-import { CLI, Executable } from '@cli/core';
+import { CLI, Executable } from '@orbital/core';
 
 import { GenerateCommand } from './commands/generate/generate.command';
 import { InfoCommand } from './commands/info.command';
