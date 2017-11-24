@@ -1,4 +1,4 @@
-import { Options, Option } from '@cli/core';
+import { Option, Options } from '@orbital/core';
 
 export class GenerateOptions extends Options {
    @Option({
@@ -6,7 +6,7 @@ export class GenerateOptions extends Options {
       description: 'timeout that does nothing',
    })
    timeout: number;
-   
+
    get timeoutInSeconds(): number {
       return this.timeout / 1000;
    }
