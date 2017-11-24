@@ -5,14 +5,12 @@ import { InfoCommand } from './commands/info.command';
 
 @CLI({
    name: 'nest',
-   version: '1.0.0', 
+   version: '1.0.0', // Should read from package.json !!
    commands: [
       GenerateCommand,
       InfoCommand
    ]
 })
-export class NestCLI implements Executable { 
-   execute() {
-      // Could also implement behavior for root command instead of just displaying the help like yarn
-   }
+export class NestCLI implements Executable {
+   execute() { }
 }

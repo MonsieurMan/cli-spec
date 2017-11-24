@@ -1,6 +1,6 @@
-import { bootstrap } from '@orbital/core';
+import { OrbitalFactory } from '@orbital/core';
 
 import { NestCLI } from './nest.cli';
 
-bootstrap(NestCLI)
-   .execute(process.argv);
+const cli = OrbitalFactory.bootstrap(NestCLI);
+cli.execute(process.argv);

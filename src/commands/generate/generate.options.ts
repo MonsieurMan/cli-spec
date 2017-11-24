@@ -1,4 +1,4 @@
-import { Options, Option } from '@cli/core';
+import { Options, Option } from '@orbital/core';
 
 export class GenerateOptions extends Options {
    @Option({
